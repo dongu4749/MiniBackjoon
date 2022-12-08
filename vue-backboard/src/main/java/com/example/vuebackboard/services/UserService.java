@@ -51,6 +51,8 @@ public class UserService implements UserDetailsService {
                 .userPw(encPassword)
                 .userName(userDto.getUserName())
                 .build();
+        userEntity.setRole("ROLE_USER");
+
 
         return userRepository.save(userEntity);
     }
