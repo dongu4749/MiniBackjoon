@@ -22,7 +22,7 @@
         </table>
         <br />
         <div class="goback-buttons">
-            <button type="button" class="w3-button w3-round w3-gray" v-on:click="fnGoBack">문제로 돌아가기</button>
+            <button type="button" class="w3-button w3-round w3-gray" v-on:click="fnGoBack(this.idx)">문제로 돌아가기</button>
         </div>
         <div class="pagination w3-bar w3-padding-16 w3-small" v-if="paging.total_list_cnt > 0">
             <span class="pg">
@@ -54,11 +54,7 @@ export default {
             idx: this.$route.query.idx,
             // requestBody: {}, //리스트 페이지 데이터전송
             list: {}, //리스트 데이터
-            no: '', //게시판 숫자처리
-            title: '',
-            author: '',
-            contents: '',
-            created_at: '',
+
             paging: {
                 block: 0,
                 end_page: 0,
@@ -74,7 +70,9 @@ export default {
             }, //페이징 데이터
             page: this.$route.query.page ? this.$route.query.page : 1,
             size: this.$route.query.size ? this.$route.query.size : 10,
-            keyword: this.$route.query.keyword,
+            search_key: this.$route.query.sk ? this.$route.query.sk : '',
+            search_value: this.$route.query.sv ? this.$route.query.sv : '',
+            // keyword: this.$route.query.keyword,
             paginavigation: function () { //페이징 처리 for문 커스텀
                 let pageNumber = [] //;
                 let start_page = this.paging.start_page;
@@ -85,69 +83,45 @@ export default {
         }
     },
     mounted() {
-        this.fnGetList(),
-        this.fnGetView()
+        this.fnGetList()
     },
     methods: {
-        fnGetView() {
-            if (this.idx !== undefined) {
-                this.$axios.get(this.$serverUrl + '/problem/' + this.idx, {
-                    params: this.requestBody
-                }).then((res) => {
-                    this.title = res.data.title
-                    this.author = res.data.author
-                    this.contents = res.data.contents
-                    this.created_at = res.data.created_at
-                }).catch((err) => {
-                    console.log(err)
-                })
-            }
-        },
-        fnView(idx) {
+        fnGoBack(idx) {
+            delete this.requestBody.idx
+            delete this.requestBody.sk
+            delete this.requestBody.sv
             this.requestBody.idx = idx
             this.$router.push({
                 path: './detail',
                 query: this.requestBody
             })
         },
-        fnGoBack() {
-            let apiUrl = this.$serverUrl + '/problem'
-            this.form = {
-                "idx": this.idx,
-                "title": this.title,
-                "contents": this.contents,
-                "author": this.author
-            }
-            this.$axios.patch(apiUrl, this.form)
-                .then((res) => {
-                    this.fnView(res.data.idx)
-                }).catch((err) => {
-                    if (err.message.indexOf('Network Error') > -1) {
-                        alert('네트워크가 원활하지 않습니다.\n잠시 후 다시 시도해주세요.')
-                    }
-                })
-        },
         fnGetList() {
             this.requestBody = {
-                sk1: "idx",
-                sv1: this.idx,
-                sk2: "id",
-                sv2: localStorage.getItem('user_id'),
-                keyword: this.keyword,
+                sk: 'problemid',
+                sv: this.idx + localStorage.getItem('user_id'),
                 page: this.page,
                 size: this.size
             }
-            this.$axios.get(this.$serveUrl + "/problem/check", {
+            this.$axios.get(this.$serverUrl + "/problem/check", {
                 params: this.requestBody,
                 headers: {}
             }).then((res) => {
-                this.list - res.data
+                if (res.data.result_code === "OK") {
+                    this.list = res.data.data
+                    this.paging = res.data.pagination
+                    this.no = this.paging.total_list_cnt - ((this.paging.page - 1) * this.paging.page_size)
+                }
             }).catch((err) => {
                 if (err.message.indexOf('Network Error') > -1) {
                     alert('네트워크가 원활하지 않습니다.\n잠시 후 다시 시도해주세요.')
                 }
             })
-        }
+        },
+
     }
 }
 </script>
+<style scoped>
+
+</style>

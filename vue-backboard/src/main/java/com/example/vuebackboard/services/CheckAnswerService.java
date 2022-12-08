@@ -34,7 +34,7 @@ public class CheckAnswerService {
                     .id(entity.getId())
                     .code(entity.getCode())
                     .result(entity.getResult())
-                    .createAt(entity.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss")))
+                    .createdAt(entity.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss")))
                     .build();
 
             dtos.add(dto);
@@ -50,6 +50,18 @@ public class CheckAnswerService {
         return Header.OK(dtos, pagination);
     }
 
+    public CheckAnswerEntity addResult(CheckAnswerDto checkAnswerDto){
+        CheckAnswerEntity entity = CheckAnswerEntity.builder()
+                .problem(checkAnswerDto.getProblem())
+                .id(checkAnswerDto.getId())
+                .code(checkAnswerDto.getCode())
+                .result(checkAnswerDto.getResult())
+                .createdAt(LocalDateTime.now())
+                .problemid(checkAnswerDto.getProblemid())
+                .build();
+        return  checkAnswerRepository.save(entity);
+    }
+
     public CheckAnswerDto getCheckAnswer(Long id){
         CheckAnswerEntity entity = checkAnswerRepository.findById(id).orElseThrow(() -> new RuntimeException("결과를 찾을 수 없습니다."));
         return CheckAnswerDto.builder()
@@ -58,7 +70,7 @@ public class CheckAnswerService {
                 .id(entity.getId())
                 .code(entity.getCode())
                 .result(entity.getResult())
-                .createAt(entity.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss")))
+                .createdAt(entity.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss")))
                 .build();
     }
 }

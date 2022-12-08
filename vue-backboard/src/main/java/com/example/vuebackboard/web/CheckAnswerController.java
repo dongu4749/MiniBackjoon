@@ -1,5 +1,6 @@
 package com.example.vuebackboard.web;
 
+import com.example.vuebackboard.entity.CheckAnswerEntity;
 import com.example.vuebackboard.model.Header;
 import com.example.vuebackboard.model.SearchCondition;
 import com.example.vuebackboard.services.CheckAnswerService;
@@ -25,6 +26,11 @@ public class CheckAnswerController {
             SearchCondition searchCondition
     ){
         return checkAnswerService.getCheckAnswerList(pageable, searchCondition);
+    }
+
+    @PostMapping("/problem/check/{id}")
+    public CheckAnswerEntity addResult(@RequestBody CheckAnswerDto checkAnswerDto){
+        return checkAnswerService.addResult(checkAnswerDto);
     }
 
     @GetMapping("/problem/check/{id}")

@@ -8,7 +8,7 @@
       <a v-if="this.$store.state.isLogin" @click="fnLogout">로그아웃</a>
     </div>
   </header>
-  <hr/>
+  <hr />
 </template>
 
 <script>

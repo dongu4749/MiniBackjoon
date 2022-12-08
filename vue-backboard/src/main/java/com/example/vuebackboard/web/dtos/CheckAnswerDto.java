@@ -17,5 +17,6 @@ public class CheckAnswerDto implements Serializable {
     private String id;
     private String code;
     private String result;
-    private String createAt;
+    private String createdAt;
+    private String problemid;
 }

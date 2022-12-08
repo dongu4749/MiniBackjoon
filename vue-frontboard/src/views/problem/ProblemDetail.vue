@@ -34,8 +34,8 @@
          title: '',
          author: '',
          contents: '',
-         created_at: ''
-
+         created_at: '',
+         problem_answer: ''
        }
      },
      mounted() {
@@ -50,6 +50,7 @@
            this.author = res.data.author
            this.contents = res.data.contents
            this.created_at = res.data.created_at
+           this.problem_answer = res.data.problem_answer
          }).catch((err) => {
            if (err.message.indexOf('Network Error') > -1) {
              alert('네트워크가 원활하지 않습니다.\n잠시 후 다시 시도해주세요.')
@@ -64,7 +65,7 @@
            },
            fnDelete() {
              if (!confirm("삭제하시겠습니까?")) return
-             this.$axios.delete(this.$serverUrl + '/board/' + this.idx, {})
+             this.$axios.delete(this.$serverUrl + '/problem/' + this.idx, {})
                .then(() => {
                  alert('삭제되었습니다.')
                  this.fnList();
