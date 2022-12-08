@@ -3,6 +3,7 @@ package com.example.vuebackboard.web;
 import com.example.vuebackboard.entity.UserEntity;
 import com.example.vuebackboard.services.UserService;
 import com.example.vuebackboard.util.JwtUtil;
+import com.example.vuebackboard.web.dtos.BoardDto;
 import com.example.vuebackboard.web.dtos.UserDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -53,4 +54,10 @@ public class UserController {
     public UserEntity userCreate(@RequestBody UserDto userDto) {
         return userService.userCreate(userDto);
     }
+
+    @GetMapping("/common/{id}")
+    public UserDto getUser(@PathVariable Long id) {
+        return userService.getUser(id);
+    }
 }
+
