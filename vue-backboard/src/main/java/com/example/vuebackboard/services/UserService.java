@@ -32,7 +32,11 @@ public class UserService implements UserDetailsService {
 
         if (userEntity.getUserId().equals(username)) {
             authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+            if (userEntity.getRole().equals("ROLE_ADMIN")){
+                authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+            }
         }
+
 
         return new User(userEntity.getUserId(), userEntity.getUserPw(), authorities);
     }
@@ -43,7 +47,7 @@ public class UserService implements UserDetailsService {
                 .userPw(encPassword)
                 .userName(userDto.getUserName())
                 .build();
-
+        userEntity.setRole("ROLE_USER");
         return userRepository.save(userEntity);
     }
 }
