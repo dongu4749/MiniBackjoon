@@ -19,9 +19,20 @@ const requireAuth = () => (from, to, next) => {
     store.state.isLogin = true
     return next()
   } // isLogin === true면 페이지 이동
-  next('/login') // isLogin === false면 다시 로그인 화면으로 이동
+  next('/common/login') // isLogin === false면 다시 로그인 화면으로 이동
 }
+const requireAdminAuth = () => (from, to, next) => {
+    const token = localStorage.getItem('user_token')
+    const role = localStorage.getItem('user_role')
+    if (token) {
+        store.state.isLogin = true
+        if(role === "ROLE_ADMIN"){
+            return next()
+        }
 
+    } // isLogin === true면 페이지 이동
+    alert('권한이 없습니다.')// isLogin === false면 다시 로그인 화면으로 이동
+}
 const routes = [
   {
     path: '/',
@@ -78,7 +89,7 @@ const routes = [
     path: '/problem/write',
     name: 'ProblemWrite',
     component: ProblemWrite,
-    beforeEnter: requireAuth()
+    beforeEnter: requireAdminAuth()
   },
    {
       path: '/problem/submit',
