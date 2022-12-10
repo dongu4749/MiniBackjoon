@@ -67,7 +67,7 @@ export default {
       list: {},
       request: {},
 
-      
+
     }
   },
   mounted() {

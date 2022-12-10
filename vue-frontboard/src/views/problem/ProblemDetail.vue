@@ -2,7 +2,7 @@
      <div class="board-detail">
      <div class="common-buttons">
               <button type="button" class="w3-button w3-round w3-blue-gray" v-on:click="fnUpdate">수정</button>&nbsp;
-              <button type="button" class="w3-button w3-round w3-red" v-on:click="fnDelete">삭제</button>&nbsp;
+              <button type="button" class="w3-button w3-round w3-red" v-on:click="fnDelete"    v-show="(nowRole === admin)">삭제</button>&nbsp;
             </div>
 
        <div class="problem-contents">
@@ -35,7 +35,9 @@
          author: '',
          contents: '',
          created_at: '',
-         problem_answer: ''
+         problem_answer: '',
+         nowRole: localStorage.getItem('user_role'),
+                  admin: 'ROLE_ADMIN'
        }
      },
      mounted() {
