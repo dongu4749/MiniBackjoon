@@ -2,9 +2,9 @@
   <div class="board-detail">
     <div class="common-buttons">
       <button type="button" class="w3-button w3-round w3-blue-gray" v-on:click="fnUpdate"
-        v-show="(author === nowuser)">수정</button>&nbsp;
+        >수정</button>&nbsp;
       <button type="button" class="w3-button w3-round w3-red" v-on:click="fnDelete"
-        v-show="(author === nowuser)">삭제</button>&nbsp;
+        >삭제</button>&nbsp;
       <button type="button" class="w3-button w3-round w3-gray" v-on:click="fnList">목록</button>
     </div>
     <div class="board-contents">
@@ -67,7 +67,7 @@ export default {
       list: {},
       request: {},
 
-      nowuser: localStorage.getItem("user_id")
+      
     }
   },
   mounted() {
