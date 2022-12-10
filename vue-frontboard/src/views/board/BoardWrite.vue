@@ -17,7 +17,6 @@
 </template>
 
 <script>
-import store from '@/vuex/store'
 export default {
   data() { //변수생성
     return {
@@ -64,21 +63,12 @@ export default {
     },
     fnSave() {
       let apiUrl = this.$serverUrl + '/board'
-      if (store.state.isLogin) {
             this.form = {
               "idx": this.idx,
               "title": this.title,
               "contents": this.contents,
               "author": localStorage.getItem('user_id')
             }
-          } else{
-            this.form = {
-              "idx": this.idx,
-              "title": this.title,
-              "contents": this.contents,
-              "author": this.author
-            }
-      }
 
       if (this.idx === undefined) {
         //INSERT

@@ -23,4 +23,5 @@ public class CheckAnswerEntity {
     private String code;
     private String result;
     private LocalDateTime createdAt;
+    private String problemid;
 }

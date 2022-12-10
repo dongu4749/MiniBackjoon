@@ -9,6 +9,10 @@
     <div class="goback-buttons">
       <button type="button" class="w3-button w3-round w3-gray" v-on:click="fnGoBack">문제로 돌아가기</button>
     </div>
+    <br />
+    <div>
+      <p>{{result}}</p>
+    </div>
   </div>
 </template>
 
@@ -23,12 +27,16 @@ export default {
       author: '',
       contents: '',
       created_at: '',
+
       code: "",
       language: "cpp",
       output: "",
       status: "",
       jobId: "",
       jobDetails: null,
+
+      result: "",
+      problem_answer: '',
     }
   },
   mounted() {
@@ -44,6 +52,7 @@ export default {
           this.author = res.data.author
           this.contents = res.data.contents
           this.created_at = res.data.created_at
+          this.problem_answer = res.data.problem_answer
         }).catch((err) => {
           console.log(err)
         })
@@ -98,6 +107,17 @@ export default {
             if (jobStatus === "pending") return
             this.output = jobOutput
             clearInterval(intervalId)
+
+            if(this.output === this.problem_answer){
+              this.result = "정답입니다!"
+            }else if(this.output !== this.problem_answer){
+              this.result = "틀렸습니다."
+            }else if(this.output === error){
+              this.result = "컴파일 에러!"
+            }
+
+            this.addResult()
+
           } else {
             this.status = "Error: Please retry!"
             console.error(error)
@@ -114,7 +134,22 @@ export default {
           this.output = "Error connecting to server"
         }
       }
-    }
+    },
+    addResult() {
+      let apiUrl = this.$serverUrl + '/problem/check/' + this.idx
+      this.form = {
+        "problem": this.idx,
+        "id": localStorage.getItem("user_id"),
+        "code": this.code,
+        "result": this.result,
+        "created_at": this.created_at,
+        "problemid": this.idx + localStorage.getItem("user_id")
+      }
+      this.$axios.post(apiUrl, this.form)
+        .then(() => {
+          alert('결과가 저장되었습니다.')
+        })
+    },
   }
 }
 </script>

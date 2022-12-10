@@ -22,12 +22,12 @@ public class CheckAnswerRepositoryCustom {
 
     public Page<CheckAnswerEntity> findAllBySearchCondition(Pageable pageable, SearchCondition searchCondition) {
         JPAQuery<CheckAnswerEntity> query = queryFactory.selectFrom(checkAnswerEntity)
-                .where(searchKeywords(searchCondition.getSk(), searchCondition.getSv(), searchCondition.getSk(), searchCondition.getSv()));
+                .where(searchKeywords(searchCondition.getSk(), searchCondition.getSv()));
 
         long total = query.stream().count();   //여기서 전체 카운트 후 아래에서 조건작업
 
         List<CheckAnswerEntity> results = query
-                .where(searchKeywords(searchCondition.getSk(), searchCondition.getSv(), searchCondition.getSk(), searchCondition.getSv()))
+                .where(searchKeywords(searchCondition.getSk(), searchCondition.getSv()))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(checkAnswerEntity.idx.desc())
@@ -36,15 +36,10 @@ public class CheckAnswerRepositoryCustom {
         return new PageImpl<>(results, pageable, total);
     }
 
-    private BooleanExpression searchKeywords(String sk1, String sv1, String sk2, String sv2) {
-        if("problem".equals(sk1)) {
-            if(StringUtils.hasLength(sv1)&&StringUtils.hasLength((sv2))) {
-                return checkAnswerEntity.problem.contains(sv1);
-            }
-        }
-        if ("id".equals(sk2)) {
-            if(StringUtils.hasLength(sv2)) {
-                return checkAnswerEntity.id.contains(sv2);
+    private BooleanExpression searchKeywords(String sk1, String sv1) {
+        if("problemid".equals(sk1)) {
+            if(StringUtils.hasLength(sv1)) {
+                return checkAnswerEntity.problemid.eq(sv1);
             }
         }
 
